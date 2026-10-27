@@ -74,7 +74,46 @@ El sistema logra una reducción sustancial del consumo de RAM, preservando la ca
 
 ## Estructura de la solución
 
-![Estructura de la solución de Flyweight](imgs/flyweight-solution-uml.png)
+```mermaid
+classDiagram
+    class TipoArbol {
+        -nombre: String
+        -color: String
+        -textura: String
+        +TipoArbol(nombre: String, color: String, textura: String)
+        +dibujar(x: int, y: int) void
+    }
+
+    class Arbol {
+        -x: int
+        -y: int
+        -tipo: TipoArbol
+        +Arbol(x: int, y: int, tipo: TipoArbol)
+        +dibujar() void
+    }
+
+    class FabricaTipoArbol {
+        -tipos: Map~String, TipoArbol~$
+        +obtenerTipo(nombre: String, color: String, textura: String)$ TipoArbol
+        +cantidadTipos()$ int
+    }
+
+    class Bosque {
+        -arboles: List~Arbol~
+        +plantarArbol(x: int, y: int, nombre: String, color: String, textura: String) void
+        +dibujar() void
+    }
+
+    class Main {
+        +main(args: String[]) void
+    }
+
+    Arbol --> TipoArbol : usa (estado intrínseco)
+    Bosque "1" *-- "0..*" Arbol : contiene
+    Bosque ..> FabricaTipoArbol : solicita tipos
+    FabricaTipoArbol o-- TipoArbol : cachea
+    Main ..> Bosque : cliente
+```
 
 ---
 
